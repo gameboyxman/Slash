@@ -1,6 +1,8 @@
 package com.slash.commands.templates;
 
 import com.slash.elements.Location;
+import com.slash.elements.Player;
+import com.slash.tools.Teleport;
 
 public class RunCode
 {
@@ -14,12 +16,12 @@ public class RunCode
 		this.args = args;
 	}
 	
-	public void run()
+	public void run(Player sender)
 	{
 		if(action.equals("warp"))
 		{
 			Location loc = (Location) args[0];
-			
+			Teleport.Warp(sender, loc);
 		}
 	}
 }

@@ -32,14 +32,31 @@ public class Run extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
-		if(args.length <= 0 || !map.containsKey(args[0]))
+		if(args.length <= 0)
 		{
 			sender.sendChatMessage(new ChatText("fihgu hates running for nothing."));
 			return;
 		}
+		try
+		{
+			Double id = Double.parseDouble(args[0]);
+			
+			if(!map.containsKey(id))
+			{
+				sender.sendChatMessage(new ChatText("fihgu hates running for everything."));
+				return;
+			}
+			RunCode code = map.get(id);
+			code.run(sender);
+		}
+		catch(NumberFormatException e)
+		{
+			sender.sendChatMessage(new ChatText("Error! keep messing with me, I shall burn your cpu!"));
+			return;
+		}
 		
-		RunCode code = map.get(args[0]);
-		code.run();
+		
+		
 	}
 	
 	public static Double getUniqueCodeID()
