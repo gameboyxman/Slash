@@ -1,14 +1,18 @@
 package com.slash.io.templates;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class ConfigurationFile extends SaveFile
 {
 	public HashMap<String,String> map = new HashMap<String,String>();
 	
+	
+	
 	@Override
 	public void save()
 	{
+		list.clear();
 		for(String key : map.keySet())
 		{
 			list.add(key);

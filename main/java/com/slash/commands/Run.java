@@ -61,7 +61,7 @@ public class Run extends Command
 	
 	public static Double getUniqueCodeID()
 	{
-		Double temp = Math.random();
+		Double temp = 0.5;
 		
 		while(map.keySet().contains(temp))
 			temp = Math.random();

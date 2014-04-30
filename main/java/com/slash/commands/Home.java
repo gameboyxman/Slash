@@ -3,6 +3,7 @@ package com.slash.commands;
 import java.util.Iterator;
 import java.util.List;
 
+import com.slash.chats.templates.ChatText;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Location;
 import com.slash.elements.Player;
@@ -34,14 +35,18 @@ public class Home extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
-		// TODO Auto-generated method stub
+		sender.profile.load();
+		Location home = sender.profile.home;
+		
+		Teleport.Warp(sender, home);
+		sender.sendChatMessage("Welcome back," + sender);
 		
 	}
 
 	@Override
 	public void processConsole(ICommandSender console, String[] args)
 	{
-		// TODO Auto-generated method stub
+		console.addChatMessage(new ChatText("go back to your void!"));
 		
 	}	
 }

@@ -36,5 +36,6 @@ public class SlashMod
 		new Test().register(e);
 		new Link().register(e);
 		new Run().register(e);
+		new SetHome().register(e);
 	}
 }
