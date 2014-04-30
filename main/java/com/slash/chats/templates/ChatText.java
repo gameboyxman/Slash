@@ -7,6 +7,7 @@ import org.lwjgl.opengl.Display;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.slash.io.Language;
 import com.slash.tools.Server;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,8 +49,8 @@ public class ChatText implements IChatComponent
 
 	public ChatText(String text)
 	{
-		this.text = text;	
 		rawText = text;
+		this.text = Language.Translate(text);	
 	}
 
 	/**

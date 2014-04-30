@@ -1,6 +1,7 @@
 package com.slash.chats.templates;
 
 
+import com.slash.io.Language;
 import com.slash.tools.McColor;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public class ItemTooltip extends ChatText
 {
 	public ItemTooltip(String text)
 	{
+		this.rawText = text;
 		NBTTagCompound item = new NBTTagCompound();
 		item.setShort("id", (short) 1);
 		item.setByte("count", (byte) 1);
@@ -35,12 +37,12 @@ public class ItemTooltip extends ChatText
 		{
 			
 			String[] split = text.split("\n");
-			display.setString("Name", split[0]);
+			display.setString("Name", Language.Translate(split[0]));
 			
 			for (int i = 1; i < split.length; i++)
 			{
-				//TODO: colors!
-				lore.appendTag(new NBTTagString(McColor.white + split[i]));
+				String line = Language.Translate(split[i]);
+				lore.appendTag(new NBTTagString(McColor.white + line));
 			}
 		}
 		else
