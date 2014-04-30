@@ -3,6 +3,7 @@ package com.slash.commands;
 import java.util.Iterator;
 import java.util.List;
 
+import com.slash.chats.styles.WarningStyle;
 import com.slash.chats.templates.ChatText;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Location;
@@ -38,6 +39,11 @@ public class Home extends Command
 		sender.profile.load();
 		Location home = sender.profile.home;
 		
+		if(home == null)
+		{
+			sender.sendChatMessage(new ChatText("you are homeless!").setChatStyle(new WarningStyle()));
+			return;
+		}
 		Teleport.Warp(sender, home);
 		sender.sendChatMessage("Welcome back," + sender);
 		
@@ -46,8 +52,7 @@ public class Home extends Command
 	@Override
 	public void processConsole(ICommandSender console, String[] args)
 	{
-		console.addChatMessage(new ChatText("go back to your void!"));
-		
+		console.addChatMessage(new ChatText("go back to your void!"));	
 	}
 
 	@Override
