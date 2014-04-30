@@ -40,6 +40,12 @@ public class Test extends Command
 	@Override
 	public void processConsole(ICommandSender console, String[] args)
 	{
-		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public IChatComponent getFancyUsage()
+	{
+		return null;
 	}	
 }

@@ -29,7 +29,7 @@ public class Home extends Command
 	@Override
 	public String getUsage(ICommandSender sender)
 	{
-		return "send player(" + sender.getCommandSenderName() + ") to his/her home.";
+		return "send player to his/her home.";
 	}
 	
 	@Override
@@ -48,5 +48,11 @@ public class Home extends Command
 	{
 		console.addChatMessage(new ChatText("go back to your void!"));
 		
+	}
+
+	@Override
+	public IChatComponent getFancyUsage()
+	{
+		return null;
 	}	
 }

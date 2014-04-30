@@ -32,6 +32,7 @@ public class SlashMod
 
 	private void registerCommands(FMLServerStartingEvent e)
 	{
+		new Slash().register(e);
 		new Home().register(e);
 		new Test().register(e);
 		new Link().register(e);

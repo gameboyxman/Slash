@@ -3,6 +3,7 @@ package com.slash.commands;
 import java.util.HashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.IChatComponent;
 import com.slash.chats.templates.ChatText;
 import com.slash.commands.templates.Command;
 import com.slash.commands.templates.RunCode;
@@ -73,6 +74,12 @@ public class Run extends Command
 	public void processConsole(ICommandSender console, String[] args)
 	{
 		
+	}
+
+	@Override
+	public IChatComponent getFancyUsage()
+	{
+		return null;
 	}
 	
 }

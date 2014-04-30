@@ -1,6 +1,7 @@
 package com.slash.commands;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.IChatComponent;
 import com.slash.chats.templates.ChatText;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Location;
@@ -35,5 +36,11 @@ public class SetHome extends Command
 	public void processConsole(ICommandSender console, String[] args)
 	{
 		
+	}
+
+	@Override
+	public IChatComponent getFancyUsage()
+	{
+		return null;
 	}
 }
