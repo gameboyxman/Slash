@@ -18,7 +18,7 @@ public class LocationStyle extends ChatStyle
 		RunCode runCode = new RunCode("warp",args);
 		Double id = Run.getUniqueCodeID();
 		Run.map.put(id, runCode);
-		this.setBold(true);
+		this.setItalic(true);
 		this.setColor(EnumChatFormatting.AQUA);		
 		HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatText("click to warp"));
 		ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/run " + id);
