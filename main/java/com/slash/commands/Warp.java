@@ -76,6 +76,7 @@ public class Warp extends Command
 				{
 					reply.setChatStyle(new WarningStyle());
 					reply.appendText("Slash can't find that warp point.");
+					sender.sendChatMessage(reply);
 					return;
 				}
 			}

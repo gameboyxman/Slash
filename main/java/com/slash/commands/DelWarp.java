@@ -26,7 +26,7 @@ public class DelWarp extends Command
 	@Override
 	public String getUsage(ICommandSender sender)
 	{
-		return "delelte a given warpPoint.";
+		return "delelte a given warp point.";
 	}
 
 	@Override
