@@ -1,10 +1,14 @@
 package com.slash.elements;
 
 import java.text.NumberFormat;
+import net.minecraft.block.material.Material;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.world.World;
 
 import com.slash.chats.styles.LocationStyle;
 import com.slash.chats.templates.ChatText;
 import com.slash.tools.McColor;
+import com.slash.tools.Server;
 
 public class Location 
 {
@@ -35,6 +39,9 @@ public class Location
 		this.dimension = dimension;
 	}	
 	
+	/**
+	 * you may rebuild this location object with this string as argument.
+	 */
 	@Override
 	public String toString()
 	{
@@ -50,10 +57,26 @@ public class Location
 		this.dimension = Integer.parseInt(split[3]);
 	}
 	
+	/**
+	 * click on this chatCompound will teleport this player to this location.
+	 * @return
+	 */
 	public ChatText toFancyString()
 	{
-		ChatText temp = new ChatText("[(" + x + "," + y + "," + height + ")" + dimension + "]");
+		ChatText temp = new ChatText("[(" + x + ", " + y + ", " + height + ") " + dimension + "]");
 		temp.setChatStyle(new LocationStyle(this));
 		return temp;
+	}
+	
+	public int getHighestBlock()
+	{
+		
+		World world = Server.getWorld(dimension);
+		int highest = world.getHeight();
+		
+		while(world.getBlock((int)this.x, highest, (int)this.y).getMaterial() == Material.air)
+			highest--;
+		
+		return highest;
 	}
 }

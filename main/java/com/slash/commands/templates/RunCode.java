@@ -1,27 +1,25 @@
 package com.slash.commands.templates;
 
+import java.util.ArrayList;
 import com.slash.elements.Location;
 import com.slash.elements.Player;
 import com.slash.tools.Teleport;
 
 public class RunCode
 {
-	public String action;
-	public Object[] args;
+	public ArrayList args = new ArrayList();
 	
-	
-	public RunCode(String action, Object[] args)
+	public RunCode(ArrayList args)
 	{
-		this.action = action;
 		this.args = args;
 	}
 	
-	public void run(Player sender)
+	/**
+	 * Override this method to run your code.
+	 * @param clicker
+	 */
+	public void run(Player clicker)
 	{
-		if(action.equals("warp"))
-		{
-			Location loc = (Location) args[0];
-			Teleport.Warp(sender, loc);
-		}
+		
 	}
 }

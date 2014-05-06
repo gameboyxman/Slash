@@ -24,7 +24,7 @@ public class Link extends Command
 	@Override
 	public String getUsage(ICommandSender sender)
 	{
-		return "show everyone a link to the item you held.";
+		return "show everyone a link of the item you held.";
 	}
 
 	@Override

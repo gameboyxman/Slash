@@ -4,6 +4,7 @@ package com.slash.elements;
 import com.mojang.authlib.GameProfile;
 import com.slash.chats.templates.ChatText;
 import com.slash.io.ProfileFile;
+import com.slash.io.WarpPointsFile;
 import com.slash.io.templates.SaveFile;
 import com.slash.tools.Server;
 import net.minecraft.command.ICommandSender;
@@ -64,5 +65,12 @@ public class Player
 	public String toString()
 	{
 		return name;
+	}
+	
+	public WarpPointsFile getWarpPointSaveFile()
+	{
+		WarpPointsFile file = new WarpPointsFile(this.name);
+		file.load();
+		return file;
 	}
 }

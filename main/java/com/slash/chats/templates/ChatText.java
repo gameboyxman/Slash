@@ -29,11 +29,11 @@ public class ChatText implements IChatComponent
 	/**
 	 * the untranslated English text
 	 */
-	String				rawText		= null;
+	String				rawText		= "";
 	/**
 	 * translated text.
 	 */
-	String				text		= null;
+	String				text		= "";
 	/**
 	 * The later siblings of this component. If this component turns the text
 	 * bold, that will apply to all the siblings until a later sibling turns the

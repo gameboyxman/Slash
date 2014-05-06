@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 public class SlashMod
 {
 	public static final String	MODID	= "Slash";
-	public static final String	VERSION	= "b1";
+	public static final String	VERSION	= "b2";
 
 	@EventHandler
 	public void init(FMLInitializationEvent event)
@@ -47,5 +47,8 @@ public class SlashMod
 		new Link().register(e);
 		new Run().register(e);
 		new SetHome().register(e);
+		new SetWarp().register(e);
+		new Warp().register(e);
+		new DelWarp().register(e);
 	}
 }
