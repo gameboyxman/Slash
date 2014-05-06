@@ -9,7 +9,7 @@ public class Tooltip extends ChatText
 {
 	public Tooltip(String name, String tooltip)
 	{
-		this.text = "[" + Language.Translate(name) + "]";
+		super("[" + Language.Translate(name) + "]");
 		this.rawText = name;
 		ChatStyle style = new ChatStyle();
 		style.setColor(EnumChatFormatting.BLUE);

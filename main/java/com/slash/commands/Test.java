@@ -1,6 +1,11 @@
 package com.slash.commands;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -34,7 +39,11 @@ public class Test extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
-		sender.entityPlayerMP.addChatMessage(sender.getLocation().toFancyString());
+		///////////////////Ultimate high blast-proof defensive slashes.///////////////////////
+		//High alert, test field: explosion may occur
+	
+		
+		///////////////////////////////////////////////////////////////////////////////////////
 	}
 
 	@Override

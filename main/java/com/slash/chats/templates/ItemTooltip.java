@@ -21,7 +21,12 @@ public class ItemTooltip extends ChatText
 {
 	public ItemTooltip(String text)
 	{
+		super(format(text));
 		this.rawText = text;
+	}
+	
+	private static String format(String text)
+	{
 		NBTTagCompound item = new NBTTagCompound();
 		item.setShort("id", (short) 1);
 		item.setByte("count", (byte) 1);
@@ -55,7 +60,7 @@ public class ItemTooltip extends ChatText
 		tag.setTag("display", display);
 		item.setTag("tag", tag);
 
-		this.text = item.toString();
+		return item.toString();
 	}
 
 	public static IChatComponent getItemTooltip(ItemStack item)
