@@ -3,6 +3,7 @@ package com.slash.fml;
 
 import com.google.common.eventbus.Subscribe;
 import com.slash.commands.*;
+import com.slash.group.Group;
 import com.slash.io.Language;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
@@ -31,6 +32,7 @@ public class SlashMod
 	{
 		registerCommands(e);
 		Language.instance.load();
+		Group.loadAll();
 	}
 	
 	@EventHandler

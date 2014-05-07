@@ -8,6 +8,7 @@ import com.slash.chats.templates.ChatText;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Location;
 import com.slash.elements.Player;
+import com.slash.tools.McColor;
 import com.slash.tools.Server;
 import com.slash.tools.Teleport;
 
@@ -45,7 +46,7 @@ public class Home extends Command
 			return;
 		}
 		Teleport.Warp(sender, home);
-		sender.sendChatMessage("Welcome back," + sender);
+		sender.sendChatMessage(McColor.yellow + "Welcome back, " + sender + "!");
 		
 	}
 

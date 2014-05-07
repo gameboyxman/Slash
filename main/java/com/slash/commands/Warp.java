@@ -12,6 +12,7 @@ import com.slash.elements.Player;
 import com.slash.elements.WarpPoint;
 import com.slash.io.WarpPointsFile;
 import com.slash.tools.McColor;
+import com.slash.tools.Server;
 import com.slash.tools.Teleport;
 
 public class Warp extends Command
@@ -68,14 +69,18 @@ public class Warp extends Command
 			{
 				WarpPointsFile file = new WarpPointsFile(sender.name);
 				
-				if(file.map.containsKey(args[0]))
+				if(Server.getplayer(args[0]) != null)
+				{
+					targetLocation = new Player(Server.getplayer(args[0])).getLocation();
+				}
+				else if(file.map.containsKey(args[0]))
 				{
 					targetLocation = new Location(file.map.get(args[0]));
 				}
 				else
 				{
 					reply.setChatStyle(new WarningStyle());
-					reply.appendText("Slash can't find that warp point.");
+					reply.appendText("Slash can't find that warp point or player.");
 					sender.sendChatMessage(reply);
 					return;
 				}
