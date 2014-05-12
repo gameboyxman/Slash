@@ -7,7 +7,16 @@ public abstract class ConfigurationFile extends SaveFile
 {
 	public HashMap<String,String> map = new HashMap<String,String>();
 	
-	
+	public String get(String key, String defaultValue)
+	{
+		if(map.containsKey(key))
+			return map.get(key);
+		else
+		{
+			map.put(key, defaultValue);
+			return defaultValue;
+		}
+	}
 	
 	@Override
 	public void save()

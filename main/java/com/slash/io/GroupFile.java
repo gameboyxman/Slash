@@ -14,7 +14,7 @@ public class GroupFile extends SaveFile
 	@Override
 	public String getName()
 	{
-		return "Players.txt";
+		return "Members.txt";
 	}
 
 	@Override

@@ -7,6 +7,8 @@ import com.slash.group.Group;
 import com.slash.io.Language;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -32,7 +34,8 @@ public class SlashMod
 	{
 		registerCommands(e);
 		Language.instance.load();
-		Group.loadAll();
+		Group.init();
+		FMLCommonHandler.instance().bus().register(new SlashEventHandler());
 	}
 	
 	@EventHandler
@@ -52,5 +55,6 @@ public class SlashMod
 		new SetWarp().register(e);
 		new Warp().register(e);
 		new DelWarp().register(e);
+		new Top().register(e);
 	}
 }

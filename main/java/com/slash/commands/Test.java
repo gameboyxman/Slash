@@ -18,6 +18,7 @@ import com.slash.chats.templates.ChatText;
 import com.slash.chats.templates.ItemTooltip;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Player;
+import com.slash.group.Group;
 import com.slash.tools.McColor;
 
 
@@ -39,9 +40,14 @@ public class Test extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
+		Player player = new Player(sender.name);
 		///////////////////Ultimate high blast-proof defensive slashes.///////////////////////
 		//High alert, test field: explosion may occur
-	
+		String list = "";
+		for(Group group : Group.getGroups(player))
+			list += group.name + " ";
+		
+		sender.sendChatMessage(new ChatText(list));
 		
 		///////////////////////////////////////////////////////////////////////////////////////
 	}

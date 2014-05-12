@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import com.slash.elements.Player;
 import com.slash.io.GroupFile;
+import com.slash.io.GroupSettingFile;
 import com.slash.io.templates.SaveFile;
 
 public class Group
@@ -26,10 +27,42 @@ public class Group
 	public void load()
 	{
 		file.load();
+		players.clear();
+		for(String name : file.list)
+		{
+			players.add(name);
+		}
+	}
+	
+	public void save()
+	{
+		file.list.clear();
+		for(String name : players)
+		{
+			file.list.add(name);
+		}
+		file.save();
+	}
+	
+	public static void init()
+	{
+		loadAll();
+	}
+	
+	public static Group getDefaultGroup()
+	{
+		return getGroup(GroupSettingFile.getDefaultGroup());
+	}
+	
+	public Group addPlayer(Player player)
+	{
+		this.players.add(player.name);
+		return this;
 	}
 	
 	public static void loadAll()
 	{
+		groups.clear();
 		File root = new File("./slash/group/");
 		
 		if(!root.exists())
@@ -37,7 +70,7 @@ public class Group
 		
 		for(String groupName : root.list())
 		{
-			if(new File("./slash/group/" + groupName + "/players.txt").exists())
+			if(new File("./slash/group/" + groupName + "/Members.txt").exists())
 				new Group(groupName);
 		}
 	}
@@ -52,7 +85,7 @@ public class Group
 	 * @param name
 	 * @return
 	 */
-	public Group getGroup(String name)
+	public static Group getGroup(String name)
 	{
 		for(Group temp : groups)
 			if(temp.name.equals(name))
@@ -61,8 +94,14 @@ public class Group
 		return new Group(name);
 	}
 	
+	/**
+	 * get groups this player is in.
+	 * @param player
+	 * @return
+	 */
 	public static ArrayList<Group> getGroups(Player player)
 	{
+		loadAll();
 		ArrayList<Group> temp = new ArrayList<Group>();
 		
 		for(Group group : groups)
