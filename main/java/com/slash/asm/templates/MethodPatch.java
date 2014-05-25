@@ -2,8 +2,8 @@ package com.slash.asm.templates;
 
 import java.util.ArrayList;
 
-public abstract class MethodPatch
+public interface MethodPatch
 {
-	public abstract ArrayList<String> getMethodList();
-	
+	public abstract String[] getMethodList();
+	public abstract String getDeobfuscatedName();
 }
