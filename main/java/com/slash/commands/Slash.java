@@ -27,7 +27,7 @@ public class Slash extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
-		sender.sendChatMessage(new ChatText("Slash Mod(" + SlashMod.VERSION + ") by fihgu").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.AQUA)));
+		sender.sendChatMessage(new ChatText("Slash Mod(" + SlashMod.instance.getVersion() + ") by fihgu").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.AQUA)));
 		sender.sendChatMessage("=============================================");
 		for(Command command : list)
 		{

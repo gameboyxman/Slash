@@ -8,6 +8,7 @@ import com.slash.elements.Player;
 import com.slash.group.Group;
 import com.slash.tools.McColor;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 
@@ -32,5 +33,4 @@ public class SlashEventHandler
 					.appendSibling(new ChatText(McColor.darkGrey + " group by default.").setChatStyle(new ChatStyle()))));
 		}
 	}
-
 }
