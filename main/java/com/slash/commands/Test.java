@@ -51,7 +51,7 @@ public class Test extends Command
 		///////////////////Ultimate high blast-proof defensive slashes.///////////////////////
 		//High alert, test field: explosion may occur		
 			
-		sender.sendChatMessage(new ChatText(ClassTransformer.getobfuscatedClassName("net.minecraft.server.management.ServerConfigurationManager")));
+		sender.sendChatMessage(new ChatText());
 		
 		///////////////////////////////////////////////////////////////////////////////////////
 		}
