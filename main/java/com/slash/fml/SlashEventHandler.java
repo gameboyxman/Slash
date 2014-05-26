@@ -5,6 +5,7 @@ import net.minecraft.util.ChatStyle;
 import com.slash.chats.styles.GroupText;
 import com.slash.chats.templates.ChatText;
 import com.slash.elements.Player;
+import com.slash.events.PlayerLoggingInEvent;
 import com.slash.group.Group;
 import com.slash.tools.McColor;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -18,7 +19,7 @@ public class SlashEventHandler
 	/**
 	 * default group settings.
 	 */
-	public void onPlayerLogin(PlayerLoggedInEvent e)
+	public void onPlayerLoggedIn(PlayerLoggedInEvent e)
 	{
 		Player player = new Player(e.player.getCommandSenderName());
 
@@ -32,5 +33,11 @@ public class SlashEventHandler
 			player.sendChatMessage(new ChatText(McColor.darkGrey + "You have been put into ").appendSibling(new GroupText(defaultGroup.name)
 					.appendSibling(new ChatText(McColor.darkGrey + " group by default.").setChatStyle(new ChatStyle()))));
 		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerLoggingIn(PlayerLoggingInEvent e)
+	{
+		e.setCanceled(true);
 	}
 }

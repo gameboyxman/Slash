@@ -1,6 +1,8 @@
 package com.slash.tools;
 
 import com.slash.elements.Player;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.EventBus;
 
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -39,5 +41,10 @@ public class Server
 	public static void sendchat(Player sender, String chat)
 	{
 		sender.entityPlayerMP.addChatMessage(new ChatComponentText(chat));
+	}
+	
+	public static EventBus getBus()
+	{
+		return FMLCommonHandler.instance().bus();
 	}
 }

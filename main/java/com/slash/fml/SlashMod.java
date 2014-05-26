@@ -83,6 +83,7 @@ public class SlashMod extends DummyModContainer
 		new DelWarp().register(e);
 		new Top().register(e);
 		new SetSpawn().register(e);
+		new Login().register(e);
 	}
 
 	@Subscribe
