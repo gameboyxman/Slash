@@ -57,10 +57,10 @@ public class MethodInfo
 					if(offset>=0)
 					{
 						className = className.substring(0,offset);
-						i+=offset+1;
+						i+=offset;
 						
 						//get the obfuscated class name
-						temp+=ClassTransformer.getobfuscatedClassName(className);
+						temp += "L" + ClassTransformer.getobfuscatedClassName(className);
 					}
 				}
 				else

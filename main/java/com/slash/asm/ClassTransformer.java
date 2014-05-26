@@ -32,12 +32,16 @@ import net.minecraft.network.NetworkManager;
  */
 public class ClassTransformer implements IClassTransformer
 {
+	
+	public final static boolean debug = false;
+	
 	public static ArrayList<MethodPatch>	list	= new ArrayList<MethodPatch>();
 	static
 	{
 		MethodPatch temp = new MethodPatch();
 		temp.className = "net.minecraft.server.management.ServerConfigurationManager";
 		temp.methods.add(new MethodInfo("initializeConnectionToPlayer","(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V"));
+		                                                              //(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V
 		temp.containerClass = "com.slash.asm.containers.FServerConfigurationManager";
 		list.add(temp);
 	}
@@ -54,38 +58,45 @@ public class ClassTransformer implements IClassTransformer
 			MethodPatch methodPatch = getMethodPatch(name);
 			if (methodPatch != null)
 			{
-				System.out.println("Slash is editing class: " + name + ".");
+				if(debug)
+					System.out.println("Slash is editing class: " + name + ".");
+				
 				// the class that needs to be patched.
 				ClassNode targetCn = new ClassNode();
 				ClassReader targetCr = new ClassReader(byteCode);
 				targetCr.accept(targetCn, 0);
 				
 				ClassNode containerCn = new ClassNode();
-				ClassReader containerCr = new ClassReader(methodPatch.containerClass.replace(".", "/"));
+				ClassReader containerCr = new ClassReader(ClassTransformer.class.getResourceAsStream("/" + methodPatch.containerClass.replace(".", "/") + ".class"));
+				
 				containerCr.accept(containerCn, 0);
 
 				for (MethodInfo methodInfo : methodPatch.methods)
 				{
 					MethodNode targetMn = getMethod(targetCn,methodInfo);
-					MethodNode containerMn = getMethod(containerCn,methodInfo);
+					MethodNode containerMn = getMethod(containerCn,methodInfo);	
+					targetMn.instructions = containerMn.instructions;
 					
-					System.out.println("target: " + targetMn.toString());
-					System.out.println("container: " + containerMn.toString());
-					
-					targetCn.methods.remove(targetMn);
-					targetCn.methods.add(containerMn);
-					System.out.println("Slash has edited method: " + methodInfo.name + methodInfo.desc + ".");
+					if(debug)
+					{
+						System.out.println("target: " + targetMn.toString());
+						System.out.println("container: " + containerMn.toString());
+						System.out.println("Slash has edited method: " + methodInfo.name + methodInfo.desc + ".");
+					}
 				}
 
 				// return the modified bytes
 				ClassWriter targetCw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 				targetCn.accept(targetCw);
 				byteCode = targetCw.toByteArray();
-				System.out.println("Slash has edited class: " + name + ".");
+				
+				if(debug)
+					System.out.println("Slash has edited class: " + name + ".");
 			}
 		}
 		catch (Exception e)
 		{
+			System.err.println("都怪时臣,minecraft又爆了!");
 			e.printStackTrace();
 		}
 		return byteCode;
@@ -121,6 +132,7 @@ public class ClassTransformer implements IClassTransformer
 		}
 		catch (IOException e)
 		{
+			System.err.println("都怪时臣,minecraft又爆了!");
 			e.printStackTrace();
 		}
 		return name;
@@ -130,11 +142,15 @@ public class ClassTransformer implements IClassTransformer
 	{
 		for (MethodNode method : cn.methods)
 		{
-			System.out.println("method.name: " + method.name);
-			System.out.println("method.desc: " + method.desc);
-			
-			boolean found = (methodInfo.name.equals(method.name) || methodInfo.getobfuscatedName().equals(method.name)) && (methodInfo.desc.equals(method.desc) || methodInfo.getobfuscatedDesc().equals(method.desc));
-
+			boolean found = (methodInfo.name.equals(method.name) || methodInfo.getobfuscatedName().endsWith(method.name)) && (methodInfo.desc.equals(method.desc) || methodInfo.getobfuscatedDesc().equals(method.desc));
+			if(debug)
+			{
+				System.out.println("method.name: " + method.name);
+				System.out.println("method.desc: " + method.desc);
+				System.out.println("obfuscated name: " + methodInfo.getobfuscatedName());
+				System.out.println("obfuscated desc: " + methodInfo.getobfuscatedDesc());
+				System.out.println("found: " + found + "\n");
+			}
 			if(found)
 			{
 				return method;

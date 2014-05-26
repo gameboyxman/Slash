@@ -39,11 +39,7 @@ public class FServerConfigurationManager extends net.minecraft.server.management
 
 	@Override
 	public void initializeConnectionToPlayer(NetworkManager par1INetworkManager, EntityPlayerMP par2EntityPlayerMP, NetHandlerPlayServer nethandlerplayserver)
-	{
-		System.out.println("Slash has patched this class!!!!!!!");
-		
-		
-		
+	{		
 		NBTTagCompound nbttagcompound = super.readPlayerDataFromFile(par2EntityPlayerMP);
 		par2EntityPlayerMP.setWorld(super.getServerInstance().worldServerForDimension(par2EntityPlayerMP.dimension));
 		par2EntityPlayerMP.theItemInWorldManager.setWorld((WorldServer) par2EntityPlayerMP.worldObj);
