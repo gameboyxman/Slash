@@ -1,5 +1,6 @@
 package com.slash.commands;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -24,12 +25,14 @@ import net.minecraft.world.WorldServer;
 import com.google.common.base.Charsets;
 import com.slash.commands.templates.Command;
 import com.slash.elements.Player;
+import com.slash.tools.McColor;
 import com.slash.tools.Server;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Login extends Command
 {
-
+	public static ArrayList<Player> playerWaitingToLogin = new ArrayList<Player>();
+	
 	@Override
 	public String getName()
 	{
@@ -45,13 +48,35 @@ public class Login extends Command
 	@Override
 	public void processPlayer(Player sender, String[] args)
 	{
-		this.loginPlayer(sender.entityPlayerMP);
-		
+		sender.profile.load();
+		if(playerWaitingToLogin.contains(sender))
+		{
+			if(args.length == 1 && args[0].equals(sender.profile.password))
+			{
+				sender.sendChatMessage(McColor.green + "Welcome back!");
+				Login.loginPlayer(sender.entityPlayerMP);
+			}
+			else
+			{
+				sender.sendChatMessage(McColor.darkRed + "Wrong password!");
+			}
+		}
+		else
+		{
+			sender.sendChatMessage(McColor.darkRed + "you have already logged in!");
+		}
 	}
 	
-	private void loginPlayer(EntityPlayerMP player)
+	public static void loginPlayer(EntityPlayerMP player)
 	{
-		System.out.println("LOGIN!");
+		//System.out.println("LOGIN!");
+		
+		Player user = new Player(player);
+		user.profile.load();
+		user.profile.ip = player.getPlayerIP();
+		user.profile.save();
+		
+		Login.playerWaitingToLogin.remove(user);
 		
 		WorldServer worldserver = Server.getServer().worldServerForDimension(0);
 		ChunkCoordinates chunkcoordinates = worldserver.getSpawnPoint();

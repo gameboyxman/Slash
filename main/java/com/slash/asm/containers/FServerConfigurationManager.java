@@ -20,6 +20,7 @@ import net.minecraft.network.play.server.S01PacketJoinGame;
 import net.minecraft.network.play.server.S05PacketSpawnPosition;
 import net.minecraft.network.play.server.S09PacketHeldItemChange;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.network.play.server.S39PacketPlayerAbilities;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.potion.PotionEffect;
@@ -42,7 +43,6 @@ public class FServerConfigurationManager extends net.minecraft.server.management
 	@Override
 	public void initializeConnectionToPlayer(NetworkManager par1INetworkManager, EntityPlayerMP par2EntityPlayerMP, NetHandlerPlayServer nethandlerplayserver)
 	{
-		boolean canceled = Server.getBus().post(new PlayerLoggingInEvent(par2EntityPlayerMP));
 
 		NBTTagCompound nbttagcompound = super.readPlayerDataFromFile(par2EntityPlayerMP);
 		par2EntityPlayerMP.setWorld(super.getServerInstance().worldServerForDimension(par2EntityPlayerMP.dimension));
@@ -72,10 +72,24 @@ public class FServerConfigurationManager extends net.minecraft.server.management
 		
 		//super.playerLoggedIn(par2EntityPlayerMP);
 		super.playerEntityList.add(par2EntityPlayerMP);
+		
+		nethandlerplayserver.setPlayerLocation(par2EntityPlayerMP.posX, par2EntityPlayerMP.posY, par2EntityPlayerMP.posZ, par2EntityPlayerMP.rotationYaw, par2EntityPlayerMP.rotationPitch);
 		///////////////////////////////////////////
-
+		
+		boolean canceled = Server.getBus().post(new PlayerLoggingInEvent(par2EntityPlayerMP));
 		if (!canceled)
 		{
+			
+			super.sendPacketToAllPlayers(new S38PacketPlayerListItem(par2EntityPlayerMP.getCommandSenderName(), true, 1000));
+	        worldserver.spawnEntityInWorld(par2EntityPlayerMP);
+	        super.func_72375_a(par2EntityPlayerMP, (WorldServer)null);
+
+	        for (int i = 0; i < super.playerEntityList.size(); ++i)
+	        {
+	            EntityPlayerMP entityplayermp1 = (EntityPlayerMP)super.playerEntityList.get(i);
+	            par2EntityPlayerMP.playerNetServerHandler.sendPacket(new S38PacketPlayerListItem(entityplayermp1.getCommandSenderName(), true, entityplayermp1.ping));
+	        }
+			
 			nethandlerplayserver.sendPacket(new S3FPacketCustomPayload("MC|Brand", super.getServerInstance().getServerModName().getBytes(Charsets.UTF_8)));
 			nethandlerplayserver.sendPacket(new S05PacketSpawnPosition(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ));
 			nethandlerplayserver.sendPacket(new S39PacketPlayerAbilities(par2EntityPlayerMP.capabilities));
@@ -91,8 +105,9 @@ public class FServerConfigurationManager extends net.minecraft.server.management
 
 			chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
 			super.sendChatMsg(chatcomponenttranslation);
-			nethandlerplayserver.setPlayerLocation(par2EntityPlayerMP.posX, par2EntityPlayerMP.posY, par2EntityPlayerMP.posZ, par2EntityPlayerMP.rotationYaw,
-					par2EntityPlayerMP.rotationPitch);
+			
+			//nethandlerplayserver.setPlayerLocation(par2EntityPlayerMP.posX, par2EntityPlayerMP.posY, par2EntityPlayerMP.posZ, par2EntityPlayerMP.rotationYaw, par2EntityPlayerMP.rotationPitch);
+			
 			super.updateTimeAndWeatherForPlayer(par2EntityPlayerMP, worldserver);
 
 			if (super.getServerInstance().getTexturePack().length() > 0)

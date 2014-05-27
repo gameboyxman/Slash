@@ -1,9 +1,11 @@
 package com.slash.fml;
 
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatStyle;
 import com.slash.chats.styles.GroupText;
 import com.slash.chats.templates.ChatText;
+import com.slash.commands.Login;
 import com.slash.elements.Player;
 import com.slash.events.PlayerLoggingInEvent;
 import com.slash.group.Group;
@@ -38,6 +40,15 @@ public class SlashEventHandler
 	@SubscribeEvent
 	public void onPlayerLoggingIn(PlayerLoggingInEvent e)
 	{
-		e.setCanceled(true);
+		EntityPlayerMP entityPlayerMP = e.entityPlayerMP;
+		Player player = new Player(entityPlayerMP);
+		player.profile.load();
+		
+		if(player.profile.ip == null || entityPlayerMP.getPlayerIP() == null || !entityPlayerMP.getPlayerIP().equals(player.profile.ip))
+		{
+			e.setCanceled(true);
+			if(!Login.playerWaitingToLogin.contains(player))
+				Login.playerWaitingToLogin.add(player);
+		}
 	}
 }

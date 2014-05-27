@@ -73,4 +73,14 @@ public class Player
 		file.load();
 		return file;
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Player)
+		{
+			return name.equals(((Player)o).name);
+		}
+		return false;
+	}
 }
