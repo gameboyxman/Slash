@@ -79,8 +79,19 @@ public class Player
 	{
 		if(o instanceof Player)
 		{
-			return name.equals(((Player)o).name);
+			Player temp = (Player) o;
+			
+			if(name.equals(temp.name))
+				return true;
+			else
+				return false;
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return name.hashCode();
 	}
 }

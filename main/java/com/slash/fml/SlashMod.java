@@ -7,6 +7,7 @@ import com.google.common.eventbus.Subscribe;
 import com.slash.commands.*;
 import com.slash.group.Group;
 import com.slash.io.Language;
+import com.slash.tools.Graphics;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,7 +61,10 @@ public class SlashMod extends DummyModContainer
 		registerCommands(e);
 		Language.instance.load();
 		Group.init();
-		FMLCommonHandler.instance().bus().register(new SlashEventHandler());
+		SlashEventHandler slashEventHandler = new SlashEventHandler();
+		FMLCommonHandler.instance().bus().register(slashEventHandler);
+		MinecraftForge.EVENT_BUS.register(slashEventHandler);
+		MinecraftForge.EVENT_BUS.register(new Graphics());
 		System.out.println("Slash is ready.");
 	}
 
@@ -85,6 +89,7 @@ public class SlashMod extends DummyModContainer
 		new SetSpawn().register(e);
 		new Login().register(e);
 		new Regiester().register(e);
+		new Select().register(e);
 	}
 
 	@Subscribe
