@@ -7,7 +7,9 @@ import com.google.common.eventbus.Subscribe;
 import com.slash.commands.*;
 import com.slash.group.Group;
 import com.slash.io.Language;
+import com.slash.packet.client.*;
 import com.slash.tools.Graphics;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,12 +26,18 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class SlashMod extends DummyModContainer
 {
 	public static SlashMod	instance;
-
+	public static SimpleNetworkWrapper channel = null;
+	public static String thePlayerName = null;
+	
 	public SlashMod()
 	{
 		super(new ModMetadata());
@@ -56,7 +64,7 @@ public class SlashMod extends DummyModContainer
 
 	@Subscribe
 	public void onServerStarted(FMLServerStartingEvent e)
-	{
+	{		
 		System.out.println("Slash is starting...");
 		registerCommands(e);
 		Language.instance.load();
@@ -64,8 +72,14 @@ public class SlashMod extends DummyModContainer
 		SlashEventHandler slashEventHandler = new SlashEventHandler();
 		FMLCommonHandler.instance().bus().register(slashEventHandler);
 		MinecraftForge.EVENT_BUS.register(slashEventHandler);
-		MinecraftForge.EVENT_BUS.register(new Graphics());
+		
+		
 		System.out.println("Slash is ready.");
+	}
+	
+	private void initGraphics()
+	{
+		MinecraftForge.EVENT_BUS.register(new Graphics());
 	}
 
 	@Subscribe
@@ -90,6 +104,7 @@ public class SlashMod extends DummyModContainer
 		new Login().register(e);
 		new Regiester().register(e);
 		new Select().register(e);
+		new Deselect().register(e);
 	}
 
 	@Subscribe
@@ -101,7 +116,14 @@ public class SlashMod extends DummyModContainer
 	@Subscribe
 	public void preInit(FMLPreInitializationEvent e)
 	{
-
+		System.out.println("SlashMod.preInit()");
+		
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
+			initGraphics();	
+		
+		channel = NetworkRegistry.INSTANCE.newSimpleChannel("Slash");
+		channel.registerMessage(SelectionBoxHandler.class, SelectionBoxPacket.class, 0, Side.CLIENT);
+		channel.registerMessage(PlayerNameHandler.class, PlayerNamePacket.class, 1, Side.CLIENT);
 	}
 
 	@Subscribe
@@ -113,6 +135,6 @@ public class SlashMod extends DummyModContainer
 	@Subscribe
 	public void postInit(FMLPostInitializationEvent e)
 	{
-
+			
 	}
 }

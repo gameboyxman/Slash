@@ -15,6 +15,8 @@ import com.slash.elements.Location;
 import com.slash.elements.Player;
 import com.slash.events.PlayerLoggingInEvent;
 import com.slash.group.Group;
+import com.slash.packet.client.PlayerNamePacket;
+import com.slash.packet.client.SelectionBoxPacket;
 import com.slash.tools.Graphics;
 import com.slash.tools.McColor;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -32,7 +34,10 @@ public class SlashEventHandler
 	 */
 	public void onPlayerLoggedIn(PlayerLoggedInEvent e)
 	{
-		Player player = new Player(e.player.getCommandSenderName());
+		Player player = new Player(e.player.getCommandSenderName());	
+		SlashMod.channel.sendTo(new PlayerNamePacket(player.name), player.entityPlayerMP);
+		//deselect
+		SlashMod.channel.sendTo(new SelectionBoxPacket(null), player.entityPlayerMP);
 
 		/**
 		 * //if player isn't in a group
@@ -74,9 +79,10 @@ public class SlashEventHandler
 			//e.entityPlayer.addChatMessage(new ChatText(e.entityPlayer.getCommandSenderName() + "x: " + e.x + ", y: " + e.z + ", height: " + e.y));			
 			Player player = new Player(e.entityPlayer);
 			
-			System.out.println(selectionMap.toString());
+			//System.out.println(selectionMap.toString());
 			if(selectionMap.containsKey(player))
 			{
+				e.setCanceled(true);
 				Location blockLocation = new Location(e.x,e.z,e.y,e.entityPlayer.dimension);
 				Area temp = selectionMap.get(player);
 				ChatText reply = new ChatText();
@@ -88,6 +94,9 @@ public class SlashEventHandler
 					reply.appendSibling(blockLocation.toFancyString());
 					if(temp.defined)
 					{
+						
+						SlashMod.channel.sendTo(new SelectionBoxPacket(temp), player.entityPlayerMP);
+						
 						reply.appendText(", Area has been defined.");
 						this.selectionMap.remove(player);
 					}
