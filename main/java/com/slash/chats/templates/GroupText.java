@@ -1,8 +1,5 @@
-package com.slash.chats.styles;
+package com.slash.chats.templates;
 
-import com.slash.chats.templates.ChatText;
-import com.slash.chats.templates.ItemTooltip;
-import com.slash.chats.templates.Tooltip;
 import com.slash.group.Group;
 import com.slash.io.Language;
 import net.minecraft.event.HoverEvent;

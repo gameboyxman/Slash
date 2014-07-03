@@ -3,7 +3,7 @@ package com.slash.tools;
 
 import com.slash.elements.Area;
 import com.slash.elements.ComplexArea;
-import com.slash.elements.CubicArea;
+import com.slash.elements.CuboidArea;
 import com.slash.elements.Location;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import cpw.mods.fml.common.FMLCommonHandler;

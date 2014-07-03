@@ -58,7 +58,14 @@ public class Login extends Command
 			}
 			else
 			{
-				sender.sendChatMessage(McColor.darkRed + "Wrong password!");
+				if(sender.profile.password == null)
+				{
+					sender.sendChatMessage(McColor.darkRed + "You are not registered!");
+				}
+				else
+				{
+					sender.sendChatMessage(McColor.darkRed + "Wrong password!");
+				}
 			}
 		}
 		else

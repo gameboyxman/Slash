@@ -16,15 +16,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-public class CubicArea extends Area
+public class CuboidArea extends Area
 {
-	public CubicArea()
+	public CuboidArea()
 	{
 		this.requiredNumberOfVertices = 2;
 		this.shape = "cube";
 	}
 
-	public CubicArea(String data)
+	public CuboidArea(String data)
 	{
 		super(data);
 	}
@@ -59,19 +59,10 @@ public class CubicArea extends Area
 	@Override
 	public void draw(float partialTicks)
 	{
-		System.out.println("draw");
-		EntityPlayer player = null;
-		
-		if(FMLCommonHandler.instance().getSidedDelegate().getSide().isClient())
-		{
-			player = Minecraft.getMinecraft().thePlayer;
-		}
-		else
-		{
-			player = Server.getplayer(SlashMod.thePlayerName);
-		}
+		//System.out.println("draw");
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-		Location playerLoc = new Location(new Player(player));
+		Location playerLoc = new Location(player);
 
 		// in different dimension, abort drawing.
 		if (playerLoc.dimension != vertices.get(0).dimension)
@@ -178,5 +169,21 @@ public class CubicArea extends Area
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	@Override
+	/**
+	 * return false if it's not defined or not overlapping
+	 */
+	public boolean isOverlapping(Area area) 
+	{
+		//TODO:needs more work to support more shapes
+		if(area instanceof CuboidArea)
+		{
+			CuboidArea cuboid = (CuboidArea)area;
+			return area.defined && this.defined && (cuboid.isInside(this.vertices.get(0)) || cuboid.isInside(this.vertices.get(1)));
+		}
+		
+		return false;
 	}
 }

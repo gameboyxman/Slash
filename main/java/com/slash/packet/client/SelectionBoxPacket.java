@@ -1,7 +1,7 @@
 package com.slash.packet.client;
 
 import com.slash.elements.Area;
-import com.slash.elements.CubicArea;
+import com.slash.elements.CuboidArea;
 import com.slash.tools.Graphics;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -45,7 +45,7 @@ public class SelectionBoxPacket implements IMessage
 		
 		if(shape.equals("cube"))
 		{
-			area = new CubicArea(data);
+			area = new CuboidArea(data);
 		}
 		
 		return area;

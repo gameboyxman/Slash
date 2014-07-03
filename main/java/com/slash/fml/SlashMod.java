@@ -9,6 +9,8 @@ import com.slash.group.Group;
 import com.slash.io.Language;
 import com.slash.packet.client.*;
 import com.slash.tools.Graphics;
+import com.slash.tools.Protection;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
@@ -36,7 +38,6 @@ public class SlashMod extends DummyModContainer
 {
 	public static SlashMod	instance;
 	public static SimpleNetworkWrapper channel = null;
-	public static String thePlayerName = null;
 	
 	public SlashMod()
 	{
@@ -63,16 +64,14 @@ public class SlashMod extends DummyModContainer
 	}
 
 	@Subscribe
-	public void onServerStarted(FMLServerStartingEvent e)
+	public void onServerStarting(FMLServerStartingEvent e)
 	{		
-		System.out.println("Slash is starting...");
 		registerCommands(e);
 		Language.instance.load();
 		Group.init();
 		SlashEventHandler slashEventHandler = new SlashEventHandler();
 		FMLCommonHandler.instance().bus().register(slashEventHandler);
 		MinecraftForge.EVENT_BUS.register(slashEventHandler);
-		
 		
 		System.out.println("Slash is ready.");
 	}
@@ -105,6 +104,15 @@ public class SlashMod extends DummyModContainer
 		new Regiester().register(e);
 		new Select().register(e);
 		new Deselect().register(e);
+		new Claim().register(e);
+		new Logout().register(e);
+	}
+	
+	private void registerChannel()
+	{
+		System.out.println("Slash is registering channel.");
+		channel = NetworkRegistry.INSTANCE.newSimpleChannel("Slash");
+		channel.registerMessage(SelectionBoxHandler.class, SelectionBoxPacket.class, 0, Side.CLIENT);
 	}
 
 	@Subscribe
@@ -116,20 +124,20 @@ public class SlashMod extends DummyModContainer
 	@Subscribe
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		System.out.println("SlashMod.preInit()");
+		System.out.println("Slash is starting...");
 		
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
-			initGraphics();	
+			initGraphics();
 		
-		channel = NetworkRegistry.INSTANCE.newSimpleChannel("Slash");
-		channel.registerMessage(SelectionBoxHandler.class, SelectionBoxPacket.class, 0, Side.CLIENT);
-		channel.registerMessage(PlayerNameHandler.class, PlayerNamePacket.class, 1, Side.CLIENT);
+		registerChannel();
+		
+		Protection.instance.load();
 	}
 
 	@Subscribe
 	public void init(FMLInitializationEvent e)
 	{
-
+		
 	}
 
 	@Subscribe

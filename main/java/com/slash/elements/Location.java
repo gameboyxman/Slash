@@ -1,7 +1,9 @@
 package com.slash.elements;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.world.World;
 
@@ -10,7 +12,7 @@ import com.slash.chats.templates.ChatText;
 import com.slash.tools.McColor;
 import com.slash.tools.Server;
 
-public class Location 
+public class Location implements Serializable
 {
 	public int dimension;
 	public double x,y,height;
@@ -20,6 +22,12 @@ public class Location
 		Location temp = player.getLocation();
 		init(temp.x,temp.y,temp.height,temp.dimension);
 	}
+	
+	public Location(EntityPlayer player)
+	{
+		init(player.posX, player.posZ, player.posY,player.dimension);
+	}
+	
 	public Location(double x, double y, double height, int dimension)
 	{
 		init(x,y,height,dimension);

@@ -7,15 +7,18 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import com.slash.chats.styles.GroupText;
+import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
+
 import com.slash.chats.templates.ChatText;
+import com.slash.chats.templates.GroupText;
+import com.slash.chats.templates.Tooltip;
 import com.slash.commands.Login;
 import com.slash.elements.Area;
+import com.slash.elements.ComplexArea;
 import com.slash.elements.Location;
 import com.slash.elements.Player;
 import com.slash.events.PlayerLoggingInEvent;
 import com.slash.group.Group;
-import com.slash.packet.client.PlayerNamePacket;
 import com.slash.packet.client.SelectionBoxPacket;
 import com.slash.tools.Graphics;
 import com.slash.tools.McColor;
@@ -26,21 +29,20 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class SlashEventHandler
 {
-	public static HashMap<Player,Area> selectionMap = new HashMap<Player,Area>();
+	public static HashMap<Player,ComplexArea> selectionMap = new HashMap<Player,ComplexArea>();
 	
-	@SubscribeEvent
 	/**
 	 * default group settings.
 	 */
+	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerLoggedInEvent e)
 	{
 		Player player = new Player(e.player.getCommandSenderName());	
-		SlashMod.channel.sendTo(new PlayerNamePacket(player.name), player.entityPlayerMP);
 		//deselect
 		SlashMod.channel.sendTo(new SelectionBoxPacket(null), player.entityPlayerMP);
 
 		/**
-		 * //if player isn't in a group
+		 *if player isn't in a group
 		 */
 		if (Group.getGroups(player).size() <= 0)
 		{
@@ -51,6 +53,9 @@ public class SlashEventHandler
 		}
 	}
 	
+	/**
+	 * Login lock up
+	 */
 	@SubscribeEvent
 	public void onPlayerLoggingIn(PlayerLoggingInEvent e)
 	{
@@ -61,6 +66,7 @@ public class SlashEventHandler
 		if(player.profile.ip == null || entityPlayerMP.getPlayerIP() == null || !entityPlayerMP.getPlayerIP().equals(player.profile.ip))
 		{
 			e.setCanceled(true);
+			player.sendChatMessage(new ChatText("Please reigster or login. ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)).appendSibling(new Tooltip("help","Commands:\n/register [password] [repeat password]\n/login [password]")));
 			if(!Login.playerWaitingToLogin.contains(player))
 				Login.playerWaitingToLogin.add(player);
 		}
@@ -70,7 +76,7 @@ public class SlashEventHandler
 	 * selecting area
 	 */
 	@SubscribeEvent
-	public void playerInteractBlockEvent(PlayerInteractEvent e)
+	public void onPlayerInteractBlockEvent(PlayerInteractEvent e)
 	{
 		
 		if(e.action == Action.LEFT_CLICK_BLOCK)
@@ -80,11 +86,12 @@ public class SlashEventHandler
 			Player player = new Player(e.entityPlayer);
 			
 			//System.out.println(selectionMap.toString());
-			if(selectionMap.containsKey(player))
+			if(selectionMap.containsKey(player) && !selectionMap.get(player).list.get(selectionMap.get(player).list.size() - 1).defined)
 			{
 				e.setCanceled(true);
 				Location blockLocation = new Location(e.x,e.z,e.y,e.entityPlayer.dimension);
-				Area temp = selectionMap.get(player);
+				ComplexArea areas = selectionMap.get(player);
+				Area temp = areas.list.get(areas.list.size()-1);
 				ChatText reply = new ChatText();
 				reply.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.AQUA));
 				if(temp != null)
@@ -96,9 +103,7 @@ public class SlashEventHandler
 					{
 						
 						SlashMod.channel.sendTo(new SelectionBoxPacket(temp), player.entityPlayerMP);
-						
 						reply.appendText(", Area has been defined.");
-						this.selectionMap.remove(player);
 					}
 					player.sendChatMessage(reply);
 				}
@@ -109,4 +114,14 @@ public class SlashEventHandler
 			}
 		}
 	}
+	
+	/**
+	 * Chest Access check
+	 */
+	@SubscribeEvent
+	public void onPlayerOpenChest(PlayerOpenContainerEvent e)
+	{
+		
+	}
+	
 }

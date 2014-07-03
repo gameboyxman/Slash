@@ -1,10 +1,11 @@
 package com.slash.elements;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class Area
+public abstract class Area implements Serializable
 {
 	/**
 	 * if this Area object has enough vertices to define itself
@@ -33,7 +34,9 @@ public abstract class Area
 	 * blocks.
 	 */
 	public abstract boolean isInside(Location location);
-
+	
+	public abstract boolean isOverlapping(Area area);
+	
 	/**
 	 * \ draw this area into world
 	 */
@@ -80,4 +83,5 @@ public abstract class Area
 			this.addVertex(new Location(parts[i]));
 		}
 	}
+	
 }

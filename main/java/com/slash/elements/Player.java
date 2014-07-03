@@ -1,12 +1,16 @@
 package com.slash.elements;
 
 
+import java.io.Serializable;
+
 import com.mojang.authlib.GameProfile;
 import com.slash.chats.templates.ChatText;
 import com.slash.io.ProfileFile;
 import com.slash.io.WarpPointsFile;
 import com.slash.io.templates.SaveFile;
 import com.slash.tools.Server;
+
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -33,6 +37,11 @@ public class Player
 		name = sender.getCommandSenderName();
 		entityPlayerMP = Server.getplayer(sender.getCommandSenderName());
 		setProfile();
+	}
+	
+	public Player(EntityClientPlayerMP player)
+	{
+		name = player.getCommandSenderName();
 	}
 
 	public Player(String playerName)

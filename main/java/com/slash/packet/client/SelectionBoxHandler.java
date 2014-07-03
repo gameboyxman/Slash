@@ -13,10 +13,7 @@ public class SelectionBoxHandler implements IMessageHandler<SelectionBoxPacket,I
 	public IMessage onMessage(SelectionBoxPacket message, MessageContext ctx)
 	{
 		
-		Area area = message.getArea();
-		
-		System.out.println(area);
-		
+		Area area = message.getArea();		
 		if(area != null)
 		{
 			Graphics.selectedAreas.list.add(area);

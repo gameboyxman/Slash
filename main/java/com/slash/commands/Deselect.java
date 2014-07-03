@@ -33,6 +33,7 @@ public class Deselect extends Command
 	{
 		ChatText reply = new ChatText("You have cleared your area selection.");
 		reply.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_GRAY));
+		
 		sender.sendChatMessage(reply);
 		SlashEventHandler.selectionMap.remove(sender);
 		SlashMod.channel.sendTo(new SelectionBoxPacket(null), sender.entityPlayerMP);
