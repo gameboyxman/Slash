@@ -44,11 +44,30 @@ public class Select extends Command
 	{
 		if(args.length == 1)
 		{
-			IChatComponent reply = new ChatText("Cannot find that area.").setChatStyle(new WarningStyle());
+			IChatComponent reply = null;
 			
 			if(this.selectArea(sender, args[0]))
+			{
 				reply = new ChatText("You have selected " + args[0] + ".").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW));
+			}
+			else
+			{
+				reply = new ChatText("Cannot find that area.").setChatStyle(new WarningStyle());
+				String areaList = "Claimed Areas: \n";			
+				int i = 0;
+				for(ClaimedArea area : Protection.instance.areas)
+				{
+					i++;
+					areaList += area.name + " ";
+					if(i == 4)
+					{
+						areaList+="\n";
+						i=0;
+					}
+				}
 				
+				reply.appendSibling(new Tooltip("Claimed Areas",areaList));
+			}
 			sender.sendChatMessage(reply);
 		}
 		else if(args.length == 0)

@@ -11,7 +11,11 @@ import com.slash.tools.McColor;
 
 public class SetSpawn extends Command
 {
-
+	public SetSpawn()
+	{
+		this.requireOp = true;
+	}
+	
 	@Override
 	public String getName()
 	{

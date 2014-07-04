@@ -57,4 +57,9 @@ public class Server
 	{
 		return FMLCommonHandler.instance().bus();
 	}
+	
+	public static boolean isOp(String playerName)
+	{
+		return getServer().getConfigurationManager().getOps().contains(playerName.toLowerCase());
+	}
 }

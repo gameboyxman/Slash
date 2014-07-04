@@ -13,6 +13,7 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -179,14 +180,14 @@ public class SlashEventHandler
 	 *Use Block access check
 	 */
 	@SubscribeEvent
-	public void onPlayerOpenChest(PlayerPlaceBlockEvent e)
+	public void onPlayerPlaceBlock(PlayerPlaceBlockEvent e)
 	{
 		Location location = e.blockLocation;
 		Block block = Server.getWorld(location.dimension).getBlock((int)location.x, (int)location.height, (int)location.y);
 		
 		for(ClaimedArea area : Protection.instance.areas)
 		{
-			if(!area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
+			if(area.isInside(location) && !area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
 			{	
 				IChatComponent warning = new ChatText("You don't have access to place block in ").setChatStyle(new WarningStyle());
 				warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
@@ -203,16 +204,19 @@ public class SlashEventHandler
 	@SubscribeEvent
 	public void onPlayerDigBlock(PlayerInteractEvent e)
 	{
-		Location location = new Location(e.x,e.z,e.z,e.world.getWorldInfo().getVanillaDimension());
-		
-		for(ClaimedArea area : Protection.instance.areas)
+		if(e.action == Action.LEFT_CLICK_BLOCK)
 		{
-			if(!area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
-			{	
-				IChatComponent warning = new ChatText("You don't have access to break block in ").setChatStyle(new WarningStyle());
-				warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
-				e.entityPlayer.addChatComponentMessage(warning);
-				e.setCanceled(true);
+			Location location = new Location(e.x,e.z,e.y,e.entityPlayer.dimension);
+			
+			for(ClaimedArea area : Protection.instance.areas)
+			{
+				if(area.isInside(location) && !area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
+				{	
+					IChatComponent warning = new ChatText("You don't have access to break block in ").setChatStyle(new WarningStyle());
+					warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+					e.entityPlayer.addChatComponentMessage(warning);
+					e.setCanceled(true);
+				}
 			}
 		}
 	}

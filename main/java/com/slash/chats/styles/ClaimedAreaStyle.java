@@ -50,7 +50,7 @@ public class ClaimedAreaStyle extends ChatStyle
 			List<Access> accessList = area.share.get(resident);
 			for(Access access : accessList)
 			{
-				tooltip+=access.toString();
+				tooltip+=access.toString() + " ";
 			}
 		}
 		

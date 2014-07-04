@@ -21,6 +21,8 @@ public abstract class Command extends CommandBase
 	public abstract void processConsole(ICommandSender console, String[] args);
 	public abstract IChatComponent getFancyUsage();
 	
+	public boolean requireOp = false;
+	
 	public void register(FMLServerStartingEvent e)
 	{
 		list.add(this);
@@ -55,6 +57,11 @@ public abstract class Command extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender)
 	{
+		if(requireOp)
+		{
+			return Server.isOp(sender.getCommandSenderName());
+		}
+		
 		return true;	
 	}
 }

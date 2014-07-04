@@ -25,10 +25,16 @@ public class ClaimedArea extends ComplexArea implements Serializable
 	
 	public boolean checkAcess(Player player, Protection.Access acess)
 	{
-		if(player.equals(owner))
+		if(player.name.equals(owner))
 			return true;
 		
 		List<Protection.Access> list = share.get(player.name);
+		
+		if(list == null)
+		{
+			return false;
+		}
+		
 		if(list.contains(acess))
 			return true;
 		

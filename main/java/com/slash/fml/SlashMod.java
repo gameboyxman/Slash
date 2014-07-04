@@ -73,6 +73,8 @@ public class SlashMod extends DummyModContainer
 		FMLCommonHandler.instance().bus().register(slashEventHandler);
 		MinecraftForge.EVENT_BUS.register(slashEventHandler);
 		
+		Protection.instance.load();
+		
 		System.out.println("Slash is ready.");
 	}
 	
@@ -85,6 +87,7 @@ public class SlashMod extends DummyModContainer
 	public void onServerStopped(FMLServerStoppingEvent e)
 	{
 		Language.instance.save();
+		Protection.instance.areas.clear();
 	}
 
 	private void registerCommands(FMLServerStartingEvent e)
@@ -107,6 +110,8 @@ public class SlashMod extends DummyModContainer
 		new Claim().register(e);
 		new Logout().register(e);
 		new Disclaim().register(e);
+		new Share().register(e);
+		new Unshare().register(e);
 	}
 	
 	private void registerChannel()
@@ -131,8 +136,6 @@ public class SlashMod extends DummyModContainer
 			initGraphics();
 		
 		registerChannel();
-		
-		Protection.instance.load();
 	}
 
 	@Subscribe

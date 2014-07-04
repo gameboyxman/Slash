@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import com.slash.elements.ClaimedArea;
 import com.sun.corba.se.impl.orbutil.ObjectWriter;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class Protection implements Serializable
-{
-	public static final long serialVersionUID = 19930302L;
-	
+{	
 	public  static Protection instance = new Protection();
 	public ArrayList<ClaimedArea> areas = new ArrayList<ClaimedArea>();
 	
@@ -58,7 +58,7 @@ public class Protection implements Serializable
 	{
 		try 
 		{
-			File file = new File("./slash/protection.save");
+			File file = new File("./slash/" + Server.getServer().getFolderName() + "/protection.save");
 			if(file.exists())
 			{
 				ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
@@ -76,7 +76,11 @@ public class Protection implements Serializable
 	{
 		try 
 		{
-			File file = new File("./slash/protection.save");
+			File dir = new File("./slash/" + Server.getServer().getFolderName() + "/");
+			if(!dir.exists())
+				dir.mkdirs();
+			
+			File file = new File("./slash/" + Server.getServer().getFolderName() + "/protection.save");
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
 			out.writeObject(Protection.instance);
 		}

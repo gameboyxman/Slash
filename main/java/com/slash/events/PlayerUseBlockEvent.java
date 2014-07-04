@@ -5,6 +5,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import com.slash.elements.Location;
 
+import cpw.mods.fml.common.eventhandler.Cancelable;
+
+@Cancelable
 public class PlayerUseBlockEvent extends PlayerEvent
 {
 	public Location blockLocation = null;

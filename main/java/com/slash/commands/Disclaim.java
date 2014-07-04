@@ -14,6 +14,7 @@ import com.slash.elements.ComplexArea;
 import com.slash.elements.Player;
 import com.slash.fml.SlashEventHandler;
 import com.slash.tools.Protection;
+import com.slash.tools.Server;
 
 public class Disclaim extends Command
 {
@@ -47,7 +48,7 @@ public class Disclaim extends Command
 			
 			ClaimedArea area = Protection.instance.get(args[0]);
 			
-			if(!area.owner.equals(sender.name))
+			if(!area.owner.equals(sender.name) && !Server.isOp(sender.name))
 			{
 				IChatComponent reply = new ChatText("You are not the owner of " + args[0] + ".").setChatStyle(new WarningStyle());
 				sender.sendChatMessage(reply);
