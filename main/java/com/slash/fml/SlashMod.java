@@ -106,6 +106,7 @@ public class SlashMod extends DummyModContainer
 		new Deselect().register(e);
 		new Claim().register(e);
 		new Logout().register(e);
+		new Disclaim().register(e);
 	}
 	
 	private void registerChannel()

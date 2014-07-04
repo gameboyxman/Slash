@@ -17,4 +17,36 @@ public class ComplexArea implements Serializable
 	{
 		this.name = name;
 	}
+	
+	public boolean isOverlapping(Area area)
+	{
+		for(Area temp : list)
+		{
+			if(area.isOverlapping(temp))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isOverlapping(ClaimedArea area)
+	{
+		for(Area temp : list)
+		{
+			if(area.isOverlapping(temp))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isInside(Location location)
+	{
+		for(Area temp : list)
+		{
+			if(temp.isInside(location))
+				return true;
+		}
+		return false;
+	}
 }

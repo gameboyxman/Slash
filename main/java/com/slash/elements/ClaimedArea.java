@@ -23,28 +23,6 @@ public class ClaimedArea extends ComplexArea implements Serializable
 		this.list = area.list;
 	}
 	
-	public boolean isOverlapping(Area area)
-	{
-		for(Area temp : list)
-		{
-			if(area.isOverlapping(temp))
-				return true;
-		}
-		
-		return false;
-	}
-	
-	public boolean isOverlapping(ClaimedArea area)
-	{
-		for(Area temp : list)
-		{
-			if(area.isOverlapping(temp))
-				return true;
-		}
-		
-		return false;
-	}
-	
 	public boolean checkAcess(Player player, Protection.Access acess)
 	{
 		if(player.equals(owner))

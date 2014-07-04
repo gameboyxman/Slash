@@ -2,26 +2,46 @@ package com.slash.fml;
 
 
 import java.util.HashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 
+import com.slash.chats.styles.ClaimedAreaStyle;
+import com.slash.chats.styles.WarningStyle;
 import com.slash.chats.templates.ChatText;
 import com.slash.chats.templates.GroupText;
 import com.slash.chats.templates.Tooltip;
 import com.slash.commands.Login;
 import com.slash.elements.Area;
+import com.slash.elements.ClaimedArea;
 import com.slash.elements.ComplexArea;
 import com.slash.elements.Location;
 import com.slash.elements.Player;
 import com.slash.events.PlayerLoggingInEvent;
+import com.slash.events.PlayerPlaceBlockEvent;
+import com.slash.events.PlayerUseBlockEvent;
 import com.slash.group.Group;
 import com.slash.packet.client.SelectionBoxPacket;
 import com.slash.tools.Graphics;
 import com.slash.tools.McColor;
+import com.slash.tools.Protection;
+import com.slash.tools.Protection.Access;
+import com.slash.tools.Server;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -116,12 +136,87 @@ public class SlashEventHandler
 	}
 	
 	/**
-	 * Chest Access check
+	 *Use Block access check
 	 */
 	@SubscribeEvent
-	public void onPlayerOpenChest(PlayerOpenContainerEvent e)
+	public void onPlayerOpenChest(PlayerUseBlockEvent e)
 	{
+		Location location = e.blockLocation;
+		Block block = Server.getWorld(location.dimension).getBlock((int)location.x, (int)location.height, (int)location.y);
 		
+		for(ClaimedArea area : Protection.instance.areas)
+		{
+			if(area.isInside(location))
+			{
+				if(block instanceof BlockContainer && !area.checkAcess(new Player(e.entityPlayer), Access.Open_Chest))
+				{
+					IChatComponent warning = new ChatText("You don't have access to open chests in ").setChatStyle(new WarningStyle());
+					warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+					e.entityPlayer.addChatComponentMessage(warning);
+					e.setCanceled(true);
+				}
+				
+				if((block instanceof BlockFenceGate || block instanceof BlockDoor || block instanceof BlockTrapDoor) && !area.checkAcess(new Player(e.entityPlayer), Access.Use_Gate))	
+				{
+					IChatComponent warning = new ChatText("You don't have access to open doors in ").setChatStyle(new WarningStyle());
+					warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+					e.entityPlayer.addChatComponentMessage(warning);
+					e.setCanceled(true);
+				}
+				
+				if((block instanceof BlockButton|| block instanceof BlockLever) && !area.checkAcess(new Player(e.entityPlayer), Access.Use_Switch))
+				{
+					IChatComponent warning = new ChatText("You don't have access to use switches in ").setChatStyle(new WarningStyle());
+					warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+					e.entityPlayer.addChatComponentMessage(warning);
+					e.setCanceled(true);
+				}
+			}
+		}
 	}
+	
+	/**
+	 *Use Block access check
+	 */
+	@SubscribeEvent
+	public void onPlayerOpenChest(PlayerPlaceBlockEvent e)
+	{
+		Location location = e.blockLocation;
+		Block block = Server.getWorld(location.dimension).getBlock((int)location.x, (int)location.height, (int)location.y);
+		
+		for(ClaimedArea area : Protection.instance.areas)
+		{
+			if(!area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
+			{	
+				IChatComponent warning = new ChatText("You don't have access to place block in ").setChatStyle(new WarningStyle());
+				warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+				e.entityPlayer.addChatComponentMessage(warning);
+				e.setCanceled(true);
+			}
+		}
+	}
+	
+	
+	/**
+	 *Dig Block access check
+	 */
+	@SubscribeEvent
+	public void onPlayerDigBlock(PlayerInteractEvent e)
+	{
+		Location location = new Location(e.x,e.z,e.z,e.world.getWorldInfo().getVanillaDimension());
+		
+		for(ClaimedArea area : Protection.instance.areas)
+		{
+			if(!area.checkAcess(new Player(e.entityPlayer), Access.Edit_Block))
+			{	
+				IChatComponent warning = new ChatText("You don't have access to break block in ").setChatStyle(new WarningStyle());
+				warning.appendSibling(new ChatText("[" + area.name + "]").setChatStyle(new ClaimedAreaStyle(area)));
+				e.entityPlayer.addChatComponentMessage(warning);
+				e.setCanceled(true);
+			}
+		}
+	}
+	
+	
 	
 }

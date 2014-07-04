@@ -17,10 +17,14 @@ import com.slash.asm.containers.FServerConfigurationManager;
 import com.slash.asm.templates.MethodInfo;
 import com.slash.asm.templates.MethodPatch;
 import com.slash.commands.Test;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.world.World;
 
 
 /**
@@ -41,8 +45,14 @@ public class ClassTransformer implements IClassTransformer
 		MethodPatch temp = new MethodPatch();
 		temp.className = "net.minecraft.server.management.ServerConfigurationManager";
 		temp.methods.add(new MethodInfo("initializeConnectionToPlayer","(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V"));
-		                                                              //(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/network/NetHandlerPlayServer;)V
 		temp.containerClass = "com.slash.asm.containers.FServerConfigurationManager";
+		list.add(temp);
+		
+		temp = new MethodPatch();
+		temp.className = "net.minecraft.server.management.ItemInWorldManager";
+		//public boolean activateBlockOrUseItem(EntityPlayer par1EntityPlayer, World par2World, ItemStack par3ItemStack, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+		temp.methods.add(new MethodInfo("activateBlockOrUseItem","(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;IIIIFFF)Z"));
+		temp.containerClass = "com.slash.asm.containers.FItemInWorldManager";
 		list.add(temp);
 	}
 
